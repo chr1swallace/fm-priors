@@ -67,6 +67,7 @@ p1 <- ggplot(k, aes(x=cond,y=value,col=variable)) +
         legend.position="none",
         axis.title.y=element_blank(),
         axis.title.x=element_blank(),
+        panel.spacing=unit(0.2,"lines"), 
         strip.text.y=element_text(hjust=1,family=""),
         strip.text.x=element_blank(),
         strip.background=element_blank(),
@@ -110,12 +111,13 @@ p0 <- ggplot(m, aes(x=cond,y=pp,col=dn)) +
         legend.position="top",
         axis.title.y=element_blank(),
         axis.title.x=element_blank(),
-        strip.text.y=element_text(hjust=1,family=""),
+       panel.spacing=unit(0.2,"lines"), 
+       strip.text.y=element_text(hjust=1,family=""),
         strip.text.x=element_blank(),
         strip.background=element_blank(),
         strip.placement="outside")
 ## p0
-plot_grid(p0,p1,ncol=1,rel_heights=c(0.7,0.3), align="v",axis="b") 
+plot_grid(p0,p1,ncol=1,rel_heights=c(0.6,0.4), align="v",axis="b") 
 
 ggsave("pp-sims.png",height=8,width=8)
 
