@@ -1,1 +1,0 @@
-We assume we have data summarising a single regression: \(\hat\beta\), the estimated effect of a genotype on an outcome, and \(\hat V\), its estimated standard error.  We assume \(\hat\beta\) is unbiased, that is \(\hat\beta \sim N(\beta, \hat V)\).
