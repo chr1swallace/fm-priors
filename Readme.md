@@ -1,6 +1,6 @@
 # Summary output
 
-[click here to see plots + legends](Readme.html)
+[click here to see plots + legends](https://chr1swallace.github.io/fm-priors/Readme.html)
 
 # Effect of prior on marginal likelihood and BF
 
@@ -32,5 +32,5 @@ qR.rb -r ./collate.R
 
 ```{sh}
 Rscript -e 'rmarkdown::render("Readme.Rmd")'
-mv Readme.html ../fm-priors.wiki
+mv Readme.html docs
 ```

@@ -227,7 +227,7 @@ m[,x:=as.numeric(cond) + ifelse(dn=="Gaussian",-0.2,0.2)]
 plot_grid(p0(m),p1,ncol=1,rel_heights=c(0.6,0.4), align="v",axis="b") 
 
 
-ggsave("pp-sims.png",height=8,width=8)
+ggsave("pp-sims.png",height=8,width=10)
 
 
 
