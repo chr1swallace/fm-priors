@@ -32,4 +32,5 @@ qR.rb -r ./collate.R
 
 ```{sh}
 Rscript -e 'rmarkdown::render("Readme.Rmd")'
+mv Readme.html ../fm-priors.wiki
 ```
