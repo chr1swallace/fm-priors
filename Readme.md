@@ -1,3 +1,7 @@
+# Summary output
+
+[](Readme.html)
+
 # Effect of prior on marginal likelihood and BF
 
 qR.rb -r ./marg-lhood-bf.R
@@ -24,3 +28,8 @@ qR.rb -r ./collate.R
 
 ![output](pp-sims.png)
 
+# Generate summary output
+
+```{sh}
+Rscript -e 'rmarkdown::render("Readme.Rmd")'
+```
