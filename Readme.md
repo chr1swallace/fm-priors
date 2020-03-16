@@ -1,6 +1,6 @@
 # Summary output
 
-[](Readme.html)
+[click here to see plots + legends](Readme.html)
 
 # Effect of prior on marginal likelihood and BF
 
