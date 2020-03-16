@@ -138,6 +138,63 @@ ggsave("pp-sims.png",height=8,width=8)
 
 ################################################################################
 
+## can restart from here if needed
+
+(load("pp-sims.RData"))
+
+## key
+k <- melt(unique(m[,.(trueW,cond,cvtype,nn)]),c("cond"))
+k[,c("cvtype","nn","trueW"):=tstrsplit(cond, " ")]
+k[,nn:=factor(nn, levels=c(2000,5000,10000))]
+k$value <- factor(as.character(k$value) %>%
+                  sub("friendly","high",.) %>%
+                  sub("lonely","low",.),
+                  levels=c("2000","5000","10000","low","high",Wvec))
+k$variable %<>% sub("cvtype","LD",.)  %>% sub("nn","N",.)  %>% sub("trueW","W",.)
+k <- k[order(value)]
+head(k)
+
+levcond <- outer(c(2000,5000,10000),c("friendly","lonely"),function(x,y) paste(y,x))  %>% as.vector()  %>%
+  outer(Wvec,., function(x,y) paste(y,x))  %>% as.vector()
+levcond
+
+k$cond <- factor(as.character(k$cond),levels=levcond)
+m$cond <- factor(as.character(m$cond),levels=levcond)
+
+p1 <- ggplot(k, aes(x=cond,y=value,col=variable)) +
+  ## geom_hline(aes(yintercept=value)) +
+  geom_point(size=3) +
+  facet_grid(variable ~ cvtype + nn, scales="free", switch="y") +
+  scale_colour_manual(values=tableau_colours[1:3]) +
+  theme(axis.text.x=element_blank(),
+        legend.position="none",
+        axis.title.y=element_blank(),
+        axis.title.x=element_blank(),
+        panel.spacing=unit(0.2,"lines"), 
+        strip.text.y=element_text(hjust=1,family=""),
+        strip.text.x=element_blank(),
+        strip.background=element_blank(),
+        strip.placement="outside")
+p1
+
+m[dn=="l",dn:="Laplace"]
+m[dn=="n",dn:="Gaussian"]
+m[,truedn:=sub("laplace","Laplace",truedn)]
+m[,truedn:=sub("norm","Gaussian",truedn)]
+m[,x:=as.numeric(cond) + ifelse(dn=="Gaussian",-0.2,0.2)]
+## p0
+plot_grid(p0(m),p1,ncol=1,rel_heights=c(0.6,0.4), align="v",axis="b") 
+## ggsave("pp-sims.png",height=8,width=8)
+
+plot_grid(p0(m[abs(z)>qnorm(5e-8/2,lower.tail=FALSE)]),
+          ## p0(m[abs(z)<qnorm(5e-8/2,lower.tail=FALSE)]), 
+          p1,ncol=1,rel_heights=c(0.6,0.4), align="v",axis="b") 
+
+ggsave("pp-sims-sig.png",height=8,width=8)
+
+
+################################################################################
+
 ## divide by z
 
 m[,zv:=cut(abs(z),
@@ -227,7 +284,7 @@ m[,x:=as.numeric(cond) + ifelse(dn=="Gaussian",-0.2,0.2)]
 plot_grid(p0(m),p1,ncol=1,rel_heights=c(0.6,0.4), align="v",axis="b") 
 
 
-ggsave("pp-sims.png",height=8,width=10)
+ggsave("pp-sims.png",height=8,width=10,scale=2)
 
 
 

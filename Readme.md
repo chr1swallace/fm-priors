@@ -26,7 +26,11 @@ done
 qR.rb -r ./collate.R
 ```
 
+Over all simulations:
 ![output](pp-sims.png)
+
+Over all simulations with p < 5e-8:
+![output](pp-sims-sig.png)
 
 # Generate summary output
 
