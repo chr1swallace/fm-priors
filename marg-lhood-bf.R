@@ -5,6 +5,7 @@ library(ggplot2)
 library(data.table)
 library(magrittr)
 library(hrbrthemes); theme_set(theme_ipsum())
+set.seed(42) # reproducibility
 
 ## analytical marginal likelihood
 marg <- function(W,data) {
@@ -50,30 +51,54 @@ ymx <- max(c(results$h1.n,results$h1.l))
 ymn2 <- min(c(results$bf.n,results$bf.l))
 ymx2 <- max(c(results$bf.n,results$bf.l))
 library(cowplot)
-p1 <- ggplot(results,aes(x=z,y=h0)) + geom_point() + ggtitle("Marg. lhood","H0") + ylab("log likelihood")
-p2 <- ggplot(results,aes(x=z,y=h1.n,col=factor(W),pch=factor(V))) + geom_point() + ggtitle("Marg. lhood","HA, normal") +
+p1 <- ggplot(results,aes(x=z,y=h0)) + geom_point() + ggtitle("","H0") + ylab("log likelihood")
+p2 <- ggplot(results,aes(x=z,y=h1.n,col=factor(W),pch=factor(V))) + geom_point() + ggtitle("","HA, Gaussian") +
   scale_colour_ipsum() +
   scale_shape(name="Simulation V",solid=FALSE) +
   ## scale_colour_manual("Analysis W",values=tableau_colours[1:3]) +
   ylim(ymn,ymx) + ylab("log likelihood")
-p3 <- ggplot(results,aes(x=z,y=h1.l,col=factor(W),pch=factor(V))) + geom_point() + ggtitle("Marg. lhood","HA, Laplace") +
+p3 <- ggplot(results,aes(x=z,y=h1.l,col=factor(W),pch=factor(V))) + geom_point() + ggtitle("","HA, Laplace") +
   scale_colour_ipsum("Analysis W") +
   scale_shape(name="Simulation V",solid=FALSE) +
   ylim(ymn,ymx) + ylab("log likelihood")
-p4 <- ggplot(results,aes(x=z,y=h1.n-h0,col=factor(W))) + geom_point() + ggtitle("BF", "normal") + geom_smooth(se=FALSE) +
+p4 <- ggplot(results,aes(x=z,y=h1.n-h0,col=factor(W))) + geom_point() + ggtitle("", "Gaussian") + geom_smooth(se=FALSE) +
   scale_colour_ipsum() +
   ## scale_shape(name="Simulation V",solid=FALSE) +
   ylim(ymn2,ymx2) + ylab("log Bayes factor")
-p5 <- ggplot(results,aes(x=z,y=h1.l-h0,col=factor(W))) + geom_point() + ggtitle("BF", "Laplace") + geom_smooth(se=FALSE) +
+p5 <- ggplot(results,aes(x=z,y=h1.l-h0,col=factor(W))) + geom_point() + ggtitle("", "Laplace") + geom_smooth(se=FALSE) +
   scale_colour_ipsum("W") +
   ## scale_shape(name="Simulation V",solid=FALSE) +
   ylim(ymn2,ymx2) + ylab("log Bayes factor")
 # extract the legend from one of the plots
 legend <- get_legend(
   # create some space to the left of the legend
-  p3 + theme(legend.box.margin = margin(0, 0, 0, 12))
+  p3 + theme(legend.box="horizontal") #legend.box.margin = margin(0, 0, 0, 12))
 )
 plots <- list(p1,p2,p3,p4,p5)  %>% lapply(., function(p) p + theme(legend.position="none"))
 plots <- c(plots,list(legend))
-plot_grid(plotlist=plots)
-ggsave("marg-lhood-bf.png",height=8,width=8)
+
+## plot_grid(plotlist=plots)
+
+plus <- ggdraw() +
+  draw_label("+", x = 0.5, y=0.5,size=15, hjust = 0.5)
+minus <- ggdraw() +
+  draw_label("-", x = 0.5, y=0.5,size=15, hjust = 0.5)
+equals <- ggdraw() +
+  draw_label("=", x = 0.5, y=0.5,size=15, hjust = 0.5)
+bf <- ggdraw() +
+  draw_label("log BF", x = 0.5, y=0.5,size=15, hjust = 0.5)
+H1 <- ggdraw() +
+  draw_label("marg. log lhood, HA", x = 0.5, y=0.5,size=15, hjust = 0.5)
+H0 <- ggdraw() +
+  draw_label("marg. log lhood, H0", x = 0.5, y=0.5,size=15, hjust = 0.5)
+
+w <- 0.1
+toprow <- plot_grid(bf,equals,H1,minus,H0,nrow=1,rel_widths=c(1,w,1,w,1))
+botleft <- plot_grid(plots[[4]],plots[[5]],nrow=2)
+botmid <- plot_grid(plots[[2]],plots[[3]],nrow=2)
+botright <- plot_grid(NULL,plots[[1]],legend,nrow=3,rel_heights=c(1,2,1))
+bot <- plot_grid(botleft,NULL,botmid,NULL,botright,nrow=1,rel_widths=c(1,w,1,w,1))
+
+final <- plot_grid(toprow,bot,nrow=2,rel_heights=c(0.1,0.9))
+
+ggsave("marg-lhood-bf.png",plot=final,height=8,width=8)
