@@ -76,4 +76,4 @@ bot <- plot_grid(botleft,NULL,botmid,NULL,botright,nrow=1,rel_widths=c(1,w,1,w,1
 
 final <- plot_grid(toprow,bot,nrow=2,rel_heights=c(0.1,0.9))
 
-# ggsave("marg-lhood-bf.png",plot=final,height=8,width=8)
+ggsave("marg-lhood-bf.png",plot=final,height=8,width=10)

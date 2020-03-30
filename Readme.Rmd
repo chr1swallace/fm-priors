@@ -27,7 +27,7 @@ qR.rb -r ./marg-lhood-bf.R
 ```
 
 ![output](marg-lhood-bf.png)
-*Log marginal likelihoods (top row) and log Bayes Factors (bottom row) vary with the evidence for association (the absolute z score) and the prior distribution and parameters. However, the overwhelming effect for large z score is the decrease in likelihood under H0, such that log Bayes factors are broadly similar across different priors.* 
+*Log marginal likelihoods and log Bayes Factors vary with the evidence for association (the absolute z score) and the prior distribution and parameters. However, the overwhelming effect for large z score is the decrease in likelihood under H0, such that log Bayes factors are broadly similar across different priors.* 
 
 ## Effect of prior on fine mapping
 
