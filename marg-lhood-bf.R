@@ -111,23 +111,22 @@ legend <- get_legend(
              legend.box.background = element_rect(colour = "black"),
              legend.box.margin = margin(6, 6, 6, 6)) #legend.box.margin = margin(0, 0, 0, 12))
 )
+
 plots <- list(p1,p2,p3,p4,p5)  %>% lapply(., function(p) p + theme(legend.position="none"))
 plots <- c(plots,list(legend))
-
-## plot_grid(plotlist=plots)
 
 plus <- ggdraw() +
   draw_label("+", x = 0.5, y=0.5,size=15, hjust = 0.5)
 minus <- ggdraw() +
-  draw_label("-", x = 0.5, y=0.5,size=15, hjust = 0.5)
+  draw_label("-", x = 0.5, y=0.55,size=30, hjust = 0.5)
 equals <- ggdraw() +
-  draw_label("=", x = 0.5, y=0.5,size=15, hjust = 0.5)
+  draw_label("=", x = 0.5, y=0.5,size=30, hjust = 0.5)
 bf <- ggdraw() +
   draw_label("log BF", x = 0.5, y=0.5,size=15, hjust = 0.5)
 H1 <- ggdraw() +
-  draw_label("marg. log lhood, HA", x = 0.5, y=0.5,size=15, hjust = 0.5)
+  draw_label("log marginal likelihood, HA", x = 0.5, y=0.5,size=15, hjust = 0.5)
 H0 <- ggdraw() +
-  draw_label("marg. log lhood, H0", x = 0.5, y=0.5,size=15, hjust = 0.5)
+  draw_label("log marginal likelihood, H0", x = 0.5, y=0.5,size=15, hjust = 0.5)
 
 w <- 0.1
 toprow <- plot_grid(H1,minus,H0,equals,bf,nrow=1,rel_widths=c(1,w,1,w,1))+
@@ -140,4 +139,5 @@ bot <- plot_grid(botleft,NULL,botmid,NULL,botright,nrow=1,rel_widths=c(1,w,1,w,1
 
 final <- plot_grid(toprow,bot,nrow=2,rel_heights=c(0.1,0.9))
 
+# ggsave("marg-lhood-bf.png",plot=final,height=8,width=10)
 ggsave("marg-lhood-bf.png",plot=final,height=8,width=8)
